@@ -1,0 +1,19 @@
+Source: dh-php5
+Section: php
+Priority: extra
+Maintainer: Ondřej Surý <ondrej@debian.org>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.5
+Vcs-Git: git://git.debian.org/pkg-php/dh-php5.git
+Vcs-Browser: http://git.debian.org/?p=pkg-php-maint/dh-php5.git;a=summary
+
+Package: dh-php5
+Architecture: all
+Depends: ${misc:Depends}, perl, debhelper
+Description: debhelper add-on to handle PHP PECL extensions
+ dh-php5 provides a debhelper sequence add-on named 'php5' and the
+ dh_php5 command.
+ .
+ The dh_php5 command adds the appropriate code to the postinst, prerm
+ and postrm maint scripts to properly enable/disable PHP PECL
+ extensions for all available PHP SAPIs.
