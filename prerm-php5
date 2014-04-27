@@ -6,8 +6,12 @@ if [ "$1" = "remove" ] || [ "$1" = "deconfigure" ] ; then
 	    php5_invoke #HELPER# ALL $conf || #ERROR_HANDLER#
 	done
     else
-	for conf in #NAMES# ; do
-	    php5#HELPER# $conf
-	done
+        if [ -x /usr/sbin/php5#HELPER# ]; then 
+            for conf in #NAMES# ; do
+	        php5#HELPER# $conf
+	    done
+        else
+            echo "WARN: php5-common has been removed, you need to cleanup /etc/php5 yourself."
+        fi
     fi
 fi
