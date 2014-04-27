@@ -1,3 +1,9 @@
+dh-php5 (0.2) unstable; urgency=medium
+
+  * Don't fail purge when php5-common is uninstalled (Closes: #745561)
+
+ -- Ondřej Surý <ondrej@debian.org>  Sun, 27 Apr 2014 15:11:09 +0200
+
 dh-php5 (0.1) unstable; urgency=low
 
   * Initial release (Closes: #737842)
