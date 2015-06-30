@@ -3,15 +3,13 @@ Section: php
 Priority: extra
 Maintainer: Ondřej Surý <ondrej@debian.org>
 Build-Depends: debhelper (>= 9)
-Standards-Version: 3.9.5
+Standards-Version: 3.9.6
 Vcs-Git: git://anonscm.debian.org/pkg-php/dh-php5.git
 Vcs-Browser: http://anonscm.debian.org/?p=pkg-php-maint/dh-php5.git;a=summary
 
 Package: dh-php5
 Architecture: all
 Depends: ${misc:Depends}, perl, debhelper
-Replaces: php5-dev (<< 5.5.9+dfsg-2~)
-Conflicts: php5-dev (<< 5.5.9+dfsg-2~)
 Description: debhelper add-on to handle PHP PECL extensions
  dh-php5 provides a debhelper sequence add-on named 'php5' and the
  dh_php5 command.
