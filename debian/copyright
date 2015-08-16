@@ -1,5 +1,5 @@
 Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
-Upstream-Name: dh-php5
+Upstream-Name: dh-php
 
 Files: *
 Copyright: 2013,2014 Ondřej Surý, Arno Töll

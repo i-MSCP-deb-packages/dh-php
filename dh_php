@@ -1,6 +1,6 @@
 #! /usr/bin/perl
 
-# dh_php5 - PHP 5 configuration helper for debhelper
+# dh_php - PHP configuration helper for debhelper
 # Copyright (C) 2012 Arno Töll <debian@toell.net>
 #               2013 Ondřej Surý <ondrej@sury.org>
 #
@@ -43,7 +43,7 @@ use Debian::Debhelper::Dh_Lib;
 
 =head1 NAME
 
-dh_php5 - register configuration snippets to the PHP 5
+dh_php - register configuration snippets to the PHP
 
 =cut
 
@@ -54,91 +54,91 @@ our $SERVER_VERSION = `php-config --version`;
 
 
 
-sub php5_api_version
+sub php_api_version
 {
 	return "phpapi-$API";
 }
 
 
-sub php5_version
+sub php_version
 {
 	return ">= $SERVER_VERSION~";
 }
 
-sub php5_api_installdir
+sub php_api_installdir
 {
 	return $MODULE_DIR;
 }
 
-sub php5_conf_installdir
+sub php_conf_installdir
 {
 	my $type = shift;
-	return "etc/php5/${type}-available/"
+	return "etc/php/${type}-available/"
 }
 
 =head1 SYNOPSIS
 
-B<dh_php5> [S<I<debhelper options>>] [S<B<--conditional>>=I<expression>] [B<--error-handler=>I<function>] [B<-n>|B<--noscripts>]
+B<dh_php> [S<I<debhelper options>>] [S<B<--conditional>>=I<expression>] [B<--error-handler=>I<function>] [B<-n>|B<--noscripts>]
 
 =head1 DESCRIPTION
 
-B<dh_php5> is a debhelper program that is responsible for correctly installing
-Php5 configuration snippets and setting postinst, prerm and dependencies in
-Php5 web server modules and web applications.
+B<dh_php> is a debhelper program that is responsible for correctly installing
+PHP configuration snippets and setting postinst, prerm and dependencies in
+PHP web server modules and web applications.
 
 It supports the following configuration types
 
 =over 4
 
 =item *
-PHP 5 modules
+PHP modules
 
 =item *
-PHP 5 configuration snippets
+PHP configuration snippets
 
 =back
 
-B<dh_php5> supports two modes: A limited auto-configuration heuristic or
+B<dh_php> supports two modes: A limited auto-configuration heuristic or
 alternatively a configuration file driven approach. If a file named
-debian/package.php5 exists, actual actions are determined by that file.
+debian/package.php exists, actual actions are determined by that file.
 
 =head1 OPERATION MODES
 
-B<dh_php5> can be used in two modes: A configuration file driven approach and
+B<dh_php> can be used in two modes: A configuration file driven approach and
 a heuristic approach. The configuration driven mode is fully documented in the
 B<FILES> section below. This mode is activated by supplying a L<debhelper(7)>
-configuration file (e.g. debian/I<package>.php5).
+configuration file (e.g. debian/I<package>.php).
 
 The alternative is a heuristic mode, in which no files are installed through
-B<dh_php5>. Instead the helper will scan the package installation directory
+B<dh_php>. Instead the helper will scan the package installation directory
 for recognized files and guess their purpose depending on their installation
 path in the file system. Use with caution.
 
 =head1 INVOKATION
 
-B<dh_php5> is not part of debhelper and might require information available
-in the php5-dev package. Packages making use of B<dh_php5> should declare
-a build-dependency against the virtual B<dh-php5> package.
+B<dh_php> is not part of debhelper and might require information available
+in the php-dev package. Packages making use of B<dh_php> should declare
+a build-dependency against the virtual B<dh-php> package.
 
-B<dh_php5> supports both, called directly from a debian/rules file or as
+B<dh_php> supports both, called directly from a debian/rules file or as
 L<dh(1)> addon. In the former case the helper should run after L<dh_install(1)>
 or their respective counter parts in local implementations at earliest.
 Alternatively it can be used as L<dh> addon by invoking it with
 
   %:
-     dh $@ --with php5
+     dh $@ --with php
 
 =head1 FILES
 
 =over 4
 
-=item debian/I<package>.php5
+=item debian/I<package>.php
 
-=item debian/php5
+=item debian/php
 
 =back
 
-Lists files to be registered with the PHP 5. The file is interpreted
+Lists files to be registered with the PHP. The file is interpreted
 as line separated list of installation stanzas, where each entry
 consists of whitespace separated values conforming to the file
 semantics below.
@@ -155,18 +155,18 @@ where the values are interpreted as follows:
 =head3 I<type>
 
 Denotes the type of file to be installed. Recognized values are B<conf>
-for PHP 5 global configuration snippets and B<mod> for PHP 5 modules.
+for PHP global configuration snippets and B<mod> for PHP modules.
 
 =head3 I<file>
 
 Is interpreted as existing file name within the source package. No path
-expansion is effectuated. Just like L<dh_install(1)>, B<dh_php5> can not
+expansion is effectuated. Just like L<dh_install(1)>, B<dh_php> can not
 rename files.
 
 =head2 GLOBAL CONFIGURATION FILES
 
 Global configuration files (determined by the B<conf> type) must have a I<.conf>
-suffix and are installed to I</etc/php5/conf-available>. Moreover, the
+suffix and are installed to I</etc/php/conf-available>. Moreover, the
 configuration is activated in the maintainer script at installation time.
 
 Such global configuration snippets are supposed to be used by web applications.
@@ -174,7 +174,7 @@ Such stanzas accept an optional third I<arguments> which is interpreted as
 dependency line of alternative web servers the package supports. See I<EXAMPLES>
 below.
 
-B<dh_php5> will set dependencies in B<${misc:Recommends}> accordingly when
+B<dh_php> will set dependencies in B<${misc:Recommends}> accordingly when
 this type of configuration is found. Alternatives from the optional I<argument>
 is incorporated into this dependency line.
 
@@ -183,8 +183,8 @@ is incorporated into this dependency line.
 Modules are handled specially and are determined by the B<mod> type. Modules can
 either have a I<.conf> or I<.load> suffix.  In that case the file is interpreted
 as module load file or module configuration file respectively and is installed to
-I</etc/php5/mods-available>.  If the file is ending with a I<.so> suffix it is
-interpreted as actual module shared object and is installed to the PHP 5 module
+I</etc/php/mods-available>.  If the file is ending with a I<.so> suffix it is
+interpreted as actual module shared object and is installed to the PHP module
 directory.  Moreover, if a I<.load> file is installed the configuration is
 activated in the maintainer script at installation time.
 
@@ -192,7 +192,7 @@ A typical module configuration has two lines, one for the I<.load> file, and one
 for the I<.so> file, albeit the latter could be installed by upstream's
 makefile, too.
 
-B<dh_php5> will set dependencies in B<${misc:Depends}> accordingly when
+B<dh_php> will set dependencies in B<${misc:Depends}> accordingly when
 this type of configuration is found.
 
 =head1 OPTIONS
@@ -225,8 +225,8 @@ instances of the same text to be added to maintainer scripts.
 
 =head1 EXAMPLES
 
-The examples below lists valid entries for a debian/I<package>.php5 file.  For
-example, the two lines below install a fictional I<mod_foo> PHP 5 module along
+The examples below lists valid entries for a debian/I<package>.php file.  For
+example, the two lines below install a fictional I<mod_foo> PHP module along
 a Debian specific I<.ini> file:
 
  mod src/foo/mod_foo.so
@@ -234,12 +234,12 @@ a Debian specific I<.ini> file:
 
 =head1 SEE ALSO
 
-L<php5ctl>(8), L<php5query>(8), L<debhelper>(7), L<dh>(1)
+L<phpquery>(8), L<debhelper>(7), L<dh>(1)
 
 =head1 AUTHOR
 
-This manual and L<dh_php5> was written by Arno Toell <debian@toell.net>
-for Apache 2 and modified for PHP 5 by Ondřej Surý <ondrej@sury.org>.
+This manual and L<dh_php> was written by Arno Toell <debian@toell.net>
+for Apache 2 and modified for PHP by Ondřej Surý <ondrej@sury.org>.
 
 =cut
 
@@ -261,7 +261,7 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 		handler => $dh{ERROR_HANDLER},
 	);
 
-	my $file = pkgfile($package, "php5");
+	my $file = pkgfile($package, "php");
 	my $tmp  = tmpdir($package);
 
 	my @files_to_register = filedoublearray($file, ".") if $file;
@@ -272,7 +272,7 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 		my @arguments = map {"$_ "} @{$line};
 
 		$type .= "s" unless $type eq "conf";
-		my $installdir = $tmp . "/" . php5_conf_installdir($type);
+		my $installdir = $tmp . "/" . php_conf_installdir($type);
 
 		if ($type eq "mods" or $type eq "conf")
 		{
@@ -289,7 +289,7 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 				}
 				elsif ($basesource =~ m/\.so$/)
 				{
-					my $modinstalldir = $tmp . "/" . php5_api_installdir();
+					my $modinstalldir = $tmp . "/" . php_api_installdir();
 					verbose_print("Installing module binary $source into $modinstalldir\n");
 					if (! -d $modinstalldir)
 					{
@@ -322,7 +322,7 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 
 	if (! $file)
 	{
-		# do black magic only if there is no .php5 configuration file
+		# do black magic only if there is no .php configuration file
 		find({  no_chdir => 1,
 			wanted => sub
 			{
@@ -331,12 +331,12 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 				my $conf_name = $file;
 				$conf_name =~ s/\.[^.]+$//;
 
-				if ($dir =~ m#etc/php5/mods-available# and $file =~ m#.(load|conf)$#)
+				if ($dir =~ m#etc/php/mods-available# and $file =~ m#.(load|conf)$#)
 				{
 					verbose_print("package $package appears	to be a web server module\n");
 					push @{$PACKAGE_TYPE{'has_a_module'}}, $conf_name if $file =~ m/\.load/;
 				}
-				if ($dir =~ m#etc/php5/conf-available# and $file =~ m#.conf$#)
+				if ($dir =~ m#etc/php/conf-available# and $file =~ m#.conf$#)
 				{
 					verbose_print("package $package appears	to contain a global configuration file \n");
 					push @{$PACKAGE_TYPE{'has_a_conf_file'}}, $conf_name;
@@ -352,11 +352,11 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 
 	if ($#{$PACKAGE_TYPE{'has_a_module'}} >= 0)
 	{
-		if ($package !~ m/php5-\w+?/)
+		if ($package !~ m/php-\w+?/)
 		{
-			warning("Package $package appears to be an PHP 5 module. It should comply to the package naming scheme php5-<modulename>\n");
+			warning("Package $package appears to be an PHP module. It should comply to the package naming scheme php-<modulename>\n");
 		}
-		addsubstvar($package, "misc:Depends", php5_api_version());
+		addsubstvar($package, "misc:Depends", php_api_version());
 
 		my $modules = "";
 		foreach my $module (@{$PACKAGE_TYPE{'has_a_module'}})
@@ -369,8 +369,8 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 
 	if ($#{$PACKAGE_TYPE{'has_a_conf_file'}} >= 0)
 	{
-		$PACKAGE_TYPE{'dependency_line'} .= "| php5";
-		addsubstvar($package, "misc:Recommends", "php5 (" . php5_version() . ") " . $PACKAGE_TYPE{'dependency_line'} );
+		$PACKAGE_TYPE{'dependency_line'} .= "| php";
+		addsubstvar($package, "misc:Recommends", "php (" . php_version() . ") " . $PACKAGE_TYPE{'dependency_line'} );
 
 		my $confs = "";
 
@@ -421,7 +421,7 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 							      $sep . "g; ";
 				}
 
-				autoscript($package, "$script_type", "$script_type-php5", $sed_command);
+				autoscript($package, "$script_type", "$script_type-php", $sed_command);
 			}
 		}
 	}
