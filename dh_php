@@ -4,9 +4,9 @@
 # Copyright (C) 2012 Arno Töll <debian@toell.net>
 #               2013 Ondřej Surý <ondrej@sury.org>
 #
-# This program is licensed at your choice under the terms of the GNU General
-# Public License vserion 2+ or under the terms of the Apache Software License
-# 2.0.
+# This program is licensed at your choice under the terms of the GNU
+# General Public License version 2+ or under the terms of the Apache
+# Software License 2.0.
 #
 # For GPL-2+:
 # This program is free software; you can redistribute it and/or
@@ -47,38 +47,9 @@ dh_php - register configuration snippets to the PHP
 
 =cut
 
-# auto-generated do not edit
-our $API = `php-config --phpapi`;
-our $MODULE_DIR = `php-config --extension-dir`;
-our $SERVER_VERSION = `php-config --version`;
-
-
-
-sub php_api_version
-{
-	return "phpapi-$API";
-}
-
-
-sub php_version
-{
-	return ">= $SERVER_VERSION~";
-}
-
-sub php_api_installdir
-{
-	return $MODULE_DIR;
-}
-
-sub php_conf_installdir
-{
-	my $type = shift;
-	return "etc/php/${type}-available/"
-}
-
 =head1 SYNOPSIS
 
-B<dh_php> [S<I<debhelper options>>] [S<B<--conditional>>=I<expression>] [B<--error-handler=>I<function>] [B<-n>|B<--noscripts>]
+B<dh_php> [S<I<debhelper options>>] [S<B<--conditional>>=I<expression>] [B<--error-handler=>I<function>] [B<-n>|B<--noscripts>] [B<--php-version=>I<php_version>]
 
 =head1 DESCRIPTION
 
@@ -114,7 +85,7 @@ B<dh_php>. Instead the helper will scan the package installation directory
 for recognized files and guess their purpose depending on their installation
 path in the file system. Use with caution.
 
-=head1 INVOKATION
+=head1 INVOCATION
 
 B<dh_php> is not part of debhelper and might require information available
 in the php-dev package. Packages making use of B<dh_php> should declare
@@ -199,6 +170,11 @@ this type of configuration is found.
 
 =over 4
 
+=item B<--php-version=>I<php_version>
+
+Make all calls to PHP versioned with <php_version>, e.g. php-config
+becomes php-config<php_version>.
+
 =item B<--error-handler=>I<function>
 
 Call the named shell I<function> if running the maintainer script fails.  The
@@ -226,10 +202,10 @@ instances of the same text to be added to maintainer scripts.
 =head1 EXAMPLES
 
 The examples below lists valid entries for a debian/I<package>.php file.  For
-example, the two lines below install a fictional I<mod_foo> PHP module along
+example, the two lines below install a fictional I<foo> PHP module along
 a Debian specific I<.ini> file:
 
- mod src/foo/mod_foo.so
+ mod src/foo/foo.so
  mod debian/foo.ini
 
 =head1 SEE ALSO
@@ -248,9 +224,36 @@ for Apache 2 and modified for PHP by Ondřej Surý <ondrej@sury.org>.
 ## main code starts here
 ##
 
-init(options => {
-	"e|noenable" => \$dh{NOENABLE},
-});
+init(options => { "e|noenable" => \$dh{NOENABLE},
+		  "php-version=s" => \$dh{PHP_VERSION}});
+
+sub php_api_version
+{
+    my $version = shift;
+    my $API = `php-config$version --phpapi`;
+    return "phpapi-$API";
+}
+
+
+sub php_version
+{
+    my $version = shift;
+    my $SERVER_VERSION = `php-config$version --version`;
+    return ">= $SERVER_VERSION~";
+}
+
+sub php_api_installdir
+{
+    my $version = shift;
+    my $MODULE_DIR = `php-config$version --extension-dir`;
+    return $MODULE_DIR;
+}
+
+sub php_conf_installdir
+{
+    my $type = shift;
+    return "etc/php/${type}-available/"
+}
 
 foreach my $package ((@{$dh{DOPACKAGES}}))
 {
@@ -258,7 +261,7 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 		has_a_module => [],
 		has_a_conf_file => [],
 		dependency_line => "",
-		handler => $dh{ERROR_HANDLER},
+		handler => $dh{ERROR_HANDLER}
 	);
 
 	my $file = pkgfile($package, "php");
@@ -289,7 +292,7 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 				}
 				elsif ($basesource =~ m/\.so$/)
 				{
-					my $modinstalldir = $tmp . "/" . php_api_installdir();
+					my $modinstalldir = $tmp . "/" . php_api_installdir($dh{PHP_VERSION});
 					verbose_print("Installing module binary $source into $modinstalldir\n");
 					if (! -d $modinstalldir)
 					{
@@ -356,7 +359,7 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 		{
 			warning("Package $package appears to be an PHP module. It should comply to the package naming scheme php-<modulename>\n");
 		}
-		addsubstvar($package, "misc:Depends", php_api_version());
+		addsubstvar($package, "misc:Depends", php_api_version($dh{PHP_VERSION}));
 
 		my $modules = "";
 		foreach my $module (@{$PACKAGE_TYPE{'has_a_module'}})
@@ -370,7 +373,7 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 	if ($#{$PACKAGE_TYPE{'has_a_conf_file'}} >= 0)
 	{
 		$PACKAGE_TYPE{'dependency_line'} .= "| php";
-		addsubstvar($package, "misc:Recommends", "php (" . php_version() . ") " . $PACKAGE_TYPE{'dependency_line'} );
+		addsubstvar($package, "misc:Recommends", "php (" . php_version($dh{PHP_VERSION}) . ") " . $PACKAGE_TYPE{'dependency_line'} );
 
 		my $confs = "";
 
@@ -399,8 +402,13 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 				my %replacements = (
 					HELPER => $ref->[0],
 					NAMES  => $ref->[1],
-					ERROR_HANDLER => $PACKAGE_TYPE{handler}
+					ERROR_HANDLER => $PACKAGE_TYPE{handler},
+					VERSION => "ALL"
 				);
+
+				if ($dh{PHP_VERSION}) {
+					$replacements{'VERSION'} = $dh{PHP_VERSION};
+				}
 
 				if ($script_type eq "prerm" || $script_type eq "postrm")
 				{
