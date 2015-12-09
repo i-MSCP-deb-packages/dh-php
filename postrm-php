@@ -3,7 +3,7 @@ if [ "$1" = "purge" ] ; then
 	. /usr/lib/php/php-maintscript-helper
 
 	for conf in #NAMES# ; do
-	    php_invoke #HELPER# ALL $conf || #ERROR_HANDLER#
+	    php_invoke #HELPER# ALL ALL $conf || #ERROR_HANDLER#
 	done
     else
 	if [ -x /usr/sbin/php#HELPER# ]; then 
