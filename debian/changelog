@@ -1,3 +1,9 @@
+dh-php (0.5) unstable; urgency=medium
+
+  * Add support for dh_php --version=X.Y
+
+ -- Ondřej Surý <ondrej@debian.org>  Wed, 09 Dec 2015 11:45:25 +0100
+
 dh-php (0.4) unstable; urgency=medium
 
   * Add extra ALL argument for ALL versions, fixes broken maintscripts
