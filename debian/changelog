@@ -1,3 +1,9 @@
+dh-php (0.4) unstable; urgency=medium
+
+  * Add extra ALL argument for ALL versions, fixes broken maintscripts
+
+ -- Ondřej Surý <ondrej@debian.org>  Wed, 09 Dec 2015 10:16:28 +0100
+
 dh-php (0.3) unstable; urgency=medium
 
   * Rename the package just to dh-php (but the multiversion support is not yet there)
