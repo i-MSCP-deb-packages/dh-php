@@ -1,3 +1,9 @@
+dh-php (0.6) unstable; urgency=medium
+
+  * Depend on at least one phpapi-<ver>, but not a specific one
+
+ -- Ondřej Surý <ondrej@debian.org>  Thu, 31 Dec 2015 09:24:29 +0100
+
 dh-php (0.5) unstable; urgency=medium
 
   * Add support for dh_php --version=X.Y
