@@ -227,18 +227,25 @@ for Apache 2 and modified for PHP by Ondřej Surý <ondrej@sury.org>.
 init(options => { "e|noenable" => \$dh{NOENABLE},
 		  "php-version=s" => \$dh{PHP_VERSION}});
 
+sub php_versions
+{
+    my @PHP_VERSIONS = split '\n', `/usr/sbin/phpquery -V`;
+    return @PHP_VERSIONS;
+}
+
 sub php_api_version
 {
     my $version = shift;
     my $API = `php-config$version --phpapi`;
+    chomp $API;
     return "phpapi-$API";
 }
-
 
 sub php_version
 {
     my $version = shift;
     my $SERVER_VERSION = `php-config$version --version`;
+    chomp $SERVER_VERSION;
     return ">= $SERVER_VERSION~";
 }
 
@@ -246,6 +253,7 @@ sub php_api_installdir
 {
     my $version = shift;
     my $MODULE_DIR = `php-config$version --extension-dir`;
+    chomp $MODULE_DIR;
     return $MODULE_DIR;
 }
 
@@ -359,7 +367,17 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 		{
 			warning("Package $package appears to be an PHP module. It should comply to the package naming scheme php-<modulename>\n");
 		}
-		addsubstvar($package, "misc:Depends", php_api_version($dh{PHP_VERSION}));
+
+		if ($dh{PHP_VERSION}) {
+			addsubstvar($package, "misc:Depends", php_api_version($dh{PHP_VERSION}));
+		} else {
+			my @versions;
+			foreach my $version (php_versions())
+			{
+				push @versions, php_api_version($version);
+			}
+			addsubstvar($package, "misc:Depends", join(" | ", @versions));
+		}
 
 		my $modules = "";
 		foreach my $module (@{$PACKAGE_TYPE{'has_a_module'}})
@@ -373,7 +391,16 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 	if ($#{$PACKAGE_TYPE{'has_a_conf_file'}} >= 0)
 	{
 		$PACKAGE_TYPE{'dependency_line'} .= "| php";
-		addsubstvar($package, "misc:Recommends", "php (" . php_version($dh{PHP_VERSION}) . ") " . $PACKAGE_TYPE{'dependency_line'} );
+		if ($dh{PHP_VERSION}) {
+			addsubstvar($package, "misc:Recommends", "php (" . php_version($dh{PHP_VERSION}) . ") " . $PACKAGE_TYPE{'dependency_line'} );
+		} else {
+			my @versions;
+			foreach my $version (php_versions())
+			{
+				push @versions, "php (" . php_version($version) . ") ";
+			}
+			addsubstvar($package, "misc:Recommends", join(" | ", @versions) . $PACKAGE_TYPE{'dependency_line'} );
+		}
 
 		my $confs = "";
 
