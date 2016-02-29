@@ -1,3 +1,10 @@
+dh-php (0.8) unstable; urgency=medium
+
+  * Rewrite [ -x /usr/sbin/php#HELPER# ] as which php#HELPER# >/dev/null
+    to prevent lintian warning about absolute paths
+
+ -- Ondřej Surý <ondrej@debian.org>  Mon, 29 Feb 2016 21:49:24 +0100
+
 dh-php (0.7) unstable; urgency=medium
 
   * Remove support for pure configuration snippets in dh_php
