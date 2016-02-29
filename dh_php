@@ -38,8 +38,8 @@
 
 use strict;
 use File::Find;
+use List::MoreUtils qw(uniq);
 use Debian::Debhelper::Dh_Lib;
-
 
 =head1 NAME
 
@@ -339,11 +339,7 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 		}
 		addsubstvar($package, "php:Depends", $depends);
 
-		my $modules = "";
-		foreach my $module (@{$PACKAGE_TYPE{'has_a_module'}})
-		{
-			$modules .= "$module ";
-		}
+		my $modules = join(" ", uniq(@{$PACKAGE_TYPE{'has_a_module'}}));
 		push @postinst_autoscripts, ["enmod", $modules];
 	}
 

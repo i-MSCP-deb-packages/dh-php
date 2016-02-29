@@ -1,3 +1,3 @@
-dh_php /usr/bin/
 *-php /usr/share/debhelper/autoscripts/
+dh_php /usr/bin/
 php.pm /usr/share/perl5/Debian/Debhelper/Sequence/

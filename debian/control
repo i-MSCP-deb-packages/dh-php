@@ -9,7 +9,10 @@ Vcs-Browser: http://anonscm.debian.org/?p=pkg-php-maint/dh-php.git;a=summary
 
 Package: dh-php
 Architecture: all
-Depends: ${misc:Depends}, perl, debhelper
+Depends: debhelper,
+         liblist-moreutils-perl,
+         perl,
+         ${misc:Depends}
 Description: debhelper add-on to handle PHP PECL extensions
  dh-php provides a debhelper sequence add-on named 'php' and the
  dh_php command.
