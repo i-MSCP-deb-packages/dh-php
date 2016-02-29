@@ -1,3 +1,7 @@
+for conf in #NAMES#; do
+    dpkg-maintscript-helper rm_conffile /etc/php/mods-available/${conf}.ini
+done
+
 if [ "$1" = "remove" ] || [ "$1" = "deconfigure" ] ; then
     if [ -e /usr/lib/php/php-maintscript-helper ] ; then
 	. /usr/lib/php/php-maintscript-helper

@@ -167,7 +167,7 @@ configuration by default.
 
 =item B<-n>, B<--noscripts>
 
-Do not modify F<postinst>/F<postrm>/F<prerm> maintainer scripts.
+Do not modify F<preinst>/F<postinst>/F<postrm>/F<prerm> maintainer scripts.
 
 
 =back
@@ -351,9 +351,9 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 	{
 		foreach my $ref (@postinst_autoscripts)
 		{
-			for my $script_type (qw/postinst prerm postrm/)
+			for my $script_type (qw/preinst postinst prerm postrm/)
 			{
-				if ($script_type eq "postinst" &&  $dh{NOENABLE})
+				if ($script_type eq "postinst" && $dh{NOENABLE})
 				{
 					next
 				}
