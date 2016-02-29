@@ -1,3 +1,12 @@
+dh-php (0.7) unstable; urgency=medium
+
+  * Remove support for pure configuration snippets in dh_php
+  * Install ini files into versioned directories /etc/php/X.Y/mods-available
+  * Remove the old configuration file in /etc/php/mods-available (if it
+    exists)
+
+ -- Ondřej Surý <ondrej@debian.org>  Mon, 29 Feb 2016 11:52:34 +0100
+
 dh-php (0.6) unstable; urgency=medium
 
   * Depend on at least one phpapi-<ver>, but not a specific one
