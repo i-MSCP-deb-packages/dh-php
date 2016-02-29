@@ -10,7 +10,7 @@ if [ "$1" = "remove" ] || [ "$1" = "deconfigure" ] ; then
 	    php_invoke #HELPER# #VERSION# ALL $conf || #ERROR_HANDLER#
 	done
     else
-        if [ -x /usr/sbin/php#HELPER# ]; then 
+        if which php#HELPER# >/dev/null; then 
             for conf in #NAMES# ; do
 	        php#HELPER# $conf
 	    done
