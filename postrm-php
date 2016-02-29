@@ -1,5 +1,5 @@
 for conf in #NAMES#; do
-    dpkg-maintscript-helper rm_conffile /etc/php/mods-available/${conf}.ini
+    dpkg-maintscript-helper rm_conffile /etc/php/mods-available/${conf}.ini -- "$@"
 done
 
 if [ "$1" = "purge" ] ; then
