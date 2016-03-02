@@ -1,3 +1,9 @@
+dh-php (0.9) unstable; urgency=medium
+
+  * Cleanup old symlinks to /etc/php/mods-available in preinst script
+
+ -- Ondřej Surý <ondrej@debian.org>  Wed, 02 Mar 2016 15:56:30 +0100
+
 dh-php (0.8) unstable; urgency=medium
 
   * Rewrite [ -x /usr/sbin/php#HELPER# ] as which php#HELPER# >/dev/null
