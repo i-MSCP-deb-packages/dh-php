@@ -1,3 +1,17 @@
 for conf in #NAMES#; do
     dpkg-maintscript-helper rm_conffile /etc/php/mods-available/${conf}.ini -- "$@"
 done
+
+if [ "$1" = "upgrade" ]; then
+    # Cleanup of the old symlinks (including broken symlinks)
+    inidir=/etc/php/mods-available
+    for dsoname in #NAMES#; do
+	inifile=${dsoname}.ini
+	find /etc/php/ -type l | \
+	    while read symlink; do
+		if [ "$(readlink $symlink)" = "${inidir}/$inifile" ]; then
+		    rm -f "${symlink}"
+		fi
+	    done
+    done
+fi
