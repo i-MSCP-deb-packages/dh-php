@@ -2,20 +2,26 @@ for conf in #NAMES#; do
     dpkg-maintscript-helper rm_conffile /etc/php/mods-available/${conf}.ini -- "$@"
 done
 
-if [ "$1" = "purge" ] ; then
+if [ "$1" = "remove" ]; then
     if [ -e /usr/lib/php/php-maintscript-helper ] ; then
 	. /usr/lib/php/php-maintscript-helper
-
+	
 	for conf in #NAMES# ; do
 	    php_invoke #HELPER# #VERSION# ALL $conf || #ERROR_HANDLER#
 	done
-    else
-	if which php#HELPER# >/dev/null; then 
-	    for conf in #NAMES# ; do
-	        php#HELPER# $conf
-	    done
-	else
-	    echo "WARN: php-common has been removed, you need to cleanup /etc/php yourself."
-	fi
     fi
+fi
+
+if [ "$1" = "purge" ] ; then
+    inidir=/etc/php/@PHP_VERSION@/mods-available
+    for conf in #NAMES#; do
+	inifile=${conf}.ini
+	# Final cleanup of possible leftover symlinks
+	find /etc/php/ -type l | \
+	    while read symlink; do
+		if [ "$(readlink $symlink)" = "${inidir}/$inifile" ]; then
+		    rm -f "${symlink}"
+		fi
+	    done
+    done
 fi
