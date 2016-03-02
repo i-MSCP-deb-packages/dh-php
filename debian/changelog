@@ -1,3 +1,9 @@
+dh-php (0.10) unstable; urgency=medium
+
+  * Even better cleanup of enabled modules in postrm remove and purge
+
+ -- Ondřej Surý <ondrej@debian.org>  Wed, 02 Mar 2016 19:04:06 +0100
+
 dh-php (0.9) unstable; urgency=medium
 
   * Cleanup old symlinks to /etc/php/mods-available in preinst script
