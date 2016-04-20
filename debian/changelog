@@ -1,3 +1,9 @@
+dh-php (0.11) unstable; urgency=medium
+
+  * Include pod2man generated man page in the package (Closes: #821860)
+
+ -- Ondřej Surý <ondrej@debian.org>  Wed, 20 Apr 2016 14:43:10 +0200
+
 dh-php (0.10) unstable; urgency=medium
 
   * Even better cleanup of enabled modules in postrm remove and purge
