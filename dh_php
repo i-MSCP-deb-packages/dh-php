@@ -66,9 +66,9 @@ PHP modules
 
 =back
 
-B<dh_php> supports two modes: A limited auto-configuration heuristic or
-alternatively a configuration file driven approach. If a file named
-debian/package.php exists, actual actions are determined by that file.
+B<dh_php> supports only a configuration file driven approach. If a
+file named debian/I<package>.php exists, actual actions are determined by
+that file.
 
 =head1 OPERATION MODES
 
@@ -194,7 +194,7 @@ L<phpquery>(8), L<debhelper>(7), L<dh>(1)
 =head1 AUTHOR
 
 This manual and L<dh_php> was written by Arno Toell <debian@toell.net>
-for Apache 2 and modified for PHP by Ondřej Surý <ondrej@sury.org>.
+for Apache 2 and modified for PHP by Ondrej Sury <ondrej@sury.org>.
 
 =cut
 
