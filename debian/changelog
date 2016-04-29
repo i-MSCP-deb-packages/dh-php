@@ -1,3 +1,9 @@
+dh-php (0.15) unstable; urgency=medium
+
+  * The PECL_SOURCE_* filling loop has to be outside the ifeq
+
+ -- Ondřej Surý <ondrej@debian.org>  Fri, 29 Apr 2016 13:27:23 +0200
+
 dh-php (0.14) unstable; urgency=medium
 
   * Use _OVERRIDE variables to allow builds for non-overriden builds
