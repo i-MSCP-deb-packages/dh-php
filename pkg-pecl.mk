@@ -29,7 +29,7 @@ $(foreach ver,$(PHP_VERSIONS),$(eval PACKAGE_XML_$(ver) := $(word 1,$(wildcard p
 # fill DH_PHP_VERSIONS with versions that have corresponding package.xml
 export DH_PHP_VERSIONS = $(if $(DH_PHP_VERSIONS_OVERRIDE),$(DH_PHP_VERSIONS_OVERRIDE),$(foreach ver,$(PHP_VERSIONS),$(if $(PACKAGE_XML_$(ver)),$(ver))))
 # for each ver in $(DH_PHP_VERSIONS), look into each corresponding package.xml for upstream PECL version
-$(foreach ver,$(DH_PHP_VERSIONS),$(eval PECL_SOURCE_$(ver) := $(if $(PACKAGE_XML_$(ver)),$(PECL_NAME)-$(shell xml2 < $(PACKAGE_XML_$(ver)) | sed -ne "s,^/package/version/release=,,p"),undefined)))
+$(foreach ver,$(DH_PHP_VERSIONS),$(eval PECL_SOURCE_$(ver) := $(if $(PACKAGE_XML_$(ver)),$(shell xml2 < $(PACKAGE_XML_$(ver)) | sed -ne "s,^/package/name=,,p")-$(shell xml2 < $(PACKAGE_XML_$(ver)) | sed -ne "s,^/package/version/release=,,p"),undefined)))
 
 CONFIGURE_TARGETS = $(addprefix configure-,$(addsuffix -stamp,$(DH_PHP_VERSIONS)))
 BUILD_TARGETS     = $(addprefix build-,$(addsuffix -stamp,$(DH_PHP_VERSIONS)))
