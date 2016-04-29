@@ -19,26 +19,24 @@ export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
 # Don't ever use RPATH on Debian
 export PHP_RPATH=no
 
-ifeq ($(PECL_NAME),)
-PECL_NAME    := $(subst php-,,$(DEB_SOURCE))
-endif
-INSTALL_ROOT := $(CURDIR)/debian/php-$(PECL_NAME)
 PHP_VERSIONS := $(shell /usr/sbin/phpquery -V)
 
-ifeq ($(DH_PHP_VERSIONS),)
+PECL_NAME    := $(if $(PECL_NAME_OVERRIDE),$(PECL_NAME_OVERRIDE),$(subst php-,,$(DEB_SOURCE)))
+INSTALL_ROOT = $(CURDIR)/debian/php-$(PECL_NAME)
+
 # find corresponding package-PHP_MAJOR.PHP_MINOR.xml, package-PHP_MAJOR.xml or package.xml
 $(foreach ver,$(PHP_VERSIONS),$(eval PACKAGE_XML_$(ver) := $(word 1,$(wildcard package-$(ver).xml package-$(basename $(ver)).xml package.xml))))
 # fill DH_PHP_VERSIONS with versions that have corresponding package.xml
-export DH_PHP_VERSIONS := $(foreach ver,$(PHP_VERSIONS),$(if $(PACKAGE_XML_$(ver)),$(ver)))
-
+export DH_PHP_VERSIONS = $(if $(DH_PHP_VERSIONS_OVERRIDE),$(DH_PHP_VERSIONS_OVERRIDE),$(foreach ver,$(PHP_VERSIONS),$(if $(PACKAGE_XML_$(ver)),$(ver))))
+ifneq ($(DH_PHP_VERSIONS_OVERRIDE),)
 # for each ver in $(DH_PHP_VERSIONS), look into each corresponding package.xml for upstream PECL version
 $(foreach ver,$(DH_PHP_VERSIONS),$(eval PECL_SOURCE_$(ver) := $(PECL_NAME)-$(shell xml2 < $(PACKAGE_XML_$(ver)) | sed -ne "s,^/package/version/release=,,p")))
 endif
 
-CONFIGURE_TARGETS := $(addprefix configure-,$(addsuffix -stamp,$(DH_PHP_VERSIONS)))
-BUILD_TARGETS     := $(addprefix build-,$(addsuffix -stamp,$(DH_PHP_VERSIONS)))
-INSTALL_TARGETS   := $(addprefix install-,$(addsuffix -stamp,$(DH_PHP_VERSIONS)))
-CLEAN_TARGETS     := $(addprefix clean-,$(addsuffix -stamp,$(DH_PHP_VERSIONS)))
+CONFIGURE_TARGETS = $(addprefix configure-,$(addsuffix -stamp,$(DH_PHP_VERSIONS)))
+BUILD_TARGETS     = $(addprefix build-,$(addsuffix -stamp,$(DH_PHP_VERSIONS)))
+INSTALL_TARGETS   = $(addprefix install-,$(addsuffix -stamp,$(DH_PHP_VERSIONS)))
+CLEAN_TARGETS     = $(addprefix clean-,$(addsuffix -stamp,$(DH_PHP_VERSIONS)))
 
 %:
 	dh $@ --with php
@@ -56,6 +54,7 @@ clean-%-stamp:
 
 configure-%-stamp: SOURCE_DIR = build-$(*)
 configure-%-stamp:
+	echo PECL_SOURCE_$(*) $(PECL_SOURCE_$(*))
 	cp -a $(PECL_SOURCE_$(*)) $(SOURCE_DIR)
 	cd $(SOURCE_DIR) && phpize$(*)
 	dh_auto_configure --sourcedirectory=$(SOURCE_DIR) -- --enable-$(PECL_NAME) --with-php-config=/usr/bin/php-config$*
