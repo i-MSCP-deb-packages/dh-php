@@ -12,6 +12,7 @@ Architecture: all
 Depends: debhelper,
          liblist-moreutils-perl,
          perl,
+         xml2,
          ${misc:Depends}
 Description: debhelper add-on to handle PHP PECL extensions
  dh-php provides a debhelper sequence add-on named 'php' and the
