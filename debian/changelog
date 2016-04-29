@@ -1,3 +1,9 @@
+dh-php (0.17) unstable; urgency=medium
+
+  * Add PECL_CONFIGURE_MAINT_APPEND variable to add more configure options
+
+ -- Ondřej Surý <ondrej@debian.org>  Fri, 29 Apr 2016 19:43:30 +0200
+
 dh-php (0.16) unstable; urgency=medium
 
   * Read /package/name from package.xml to guess PECL extension directory
