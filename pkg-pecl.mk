@@ -54,7 +54,7 @@ configure-%-stamp: SOURCE_DIR = build-$(*)
 configure-%-stamp:
 	cp -a $(PECL_SOURCE_$(*)) $(SOURCE_DIR)
 	cd $(SOURCE_DIR) && phpize$(*)
-	dh_auto_configure --sourcedirectory=$(SOURCE_DIR) -- --enable-$(PECL_NAME) --with-php-config=/usr/bin/php-config$*
+	dh_auto_configure --sourcedirectory=$(SOURCE_DIR) -- --enable-$(PECL_NAME) --with-php-config=/usr/bin/php-config$* $(PECL_CONFIGURE_MAINT_APPEND)
 	touch configure-$(*)-stamp
 
 build-%-stamp: SOURCE_DIR = build-$(*)
