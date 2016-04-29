@@ -1,3 +1,9 @@
+dh-php (0.13) unstable; urgency=medium
+
+  * Make DH_PHP_VERSIONS and PECL_SOURCE overridable
+
+ -- Ondřej Surý <ondrej@debian.org>  Fri, 29 Apr 2016 11:49:29 +0200
+
 dh-php (0.12) unstable; urgency=medium
 
   * Add makefile snippets for automatic PECL extension building
