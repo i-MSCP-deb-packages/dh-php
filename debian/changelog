@@ -1,3 +1,9 @@
+dh-php (0.12) unstable; urgency=medium
+
+  * Add makefile snippets for automatic PECL extension building
+
+ -- Ondřej Surý <ondrej@debian.org>  Fri, 29 Apr 2016 09:50:59 +0200
+
 dh-php (0.11) unstable; urgency=medium
 
   * Include pod2man generated man page in the package (Closes: #821860)
