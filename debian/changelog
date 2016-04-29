@@ -1,3 +1,10 @@
+dh-php (0.16) unstable; urgency=medium
+
+  * Read /package/name from package.xml to guess PECL extension directory
+    name itself and don't rely on Debian package name mapping
+
+ -- Ondřej Surý <ondrej@debian.org>  Fri, 29 Apr 2016 15:38:47 +0200
+
 dh-php (0.15) unstable; urgency=medium
 
   * The PECL_SOURCE_* filling loop has to be outside the ifeq
