@@ -28,10 +28,8 @@ INSTALL_ROOT = $(CURDIR)/debian/php-$(PECL_NAME)
 $(foreach ver,$(PHP_VERSIONS),$(eval PACKAGE_XML_$(ver) := $(word 1,$(wildcard package-$(ver).xml package-$(basename $(ver)).xml package.xml))))
 # fill DH_PHP_VERSIONS with versions that have corresponding package.xml
 export DH_PHP_VERSIONS = $(if $(DH_PHP_VERSIONS_OVERRIDE),$(DH_PHP_VERSIONS_OVERRIDE),$(foreach ver,$(PHP_VERSIONS),$(if $(PACKAGE_XML_$(ver)),$(ver))))
-ifneq ($(DH_PHP_VERSIONS_OVERRIDE),)
 # for each ver in $(DH_PHP_VERSIONS), look into each corresponding package.xml for upstream PECL version
-$(foreach ver,$(DH_PHP_VERSIONS),$(eval PECL_SOURCE_$(ver) := $(PECL_NAME)-$(shell xml2 < $(PACKAGE_XML_$(ver)) | sed -ne "s,^/package/version/release=,,p")))
-endif
+$(foreach ver,$(DH_PHP_VERSIONS),$(eval PECL_SOURCE_$(ver) := $(if $(PACKAGE_XML_$(ver)),$(PECL_NAME)-$(shell xml2 < $(PACKAGE_XML_$(ver)) | sed -ne "s,^/package/version/release=,,p"),undefined)))
 
 CONFIGURE_TARGETS = $(addprefix configure-,$(addsuffix -stamp,$(DH_PHP_VERSIONS)))
 BUILD_TARGETS     = $(addprefix build-,$(addsuffix -stamp,$(DH_PHP_VERSIONS)))
@@ -54,7 +52,6 @@ clean-%-stamp:
 
 configure-%-stamp: SOURCE_DIR = build-$(*)
 configure-%-stamp:
-	echo PECL_SOURCE_$(*) $(PECL_SOURCE_$(*))
 	cp -a $(PECL_SOURCE_$(*)) $(SOURCE_DIR)
 	cd $(SOURCE_DIR) && phpize$(*)
 	dh_auto_configure --sourcedirectory=$(SOURCE_DIR) -- --enable-$(PECL_NAME) --with-php-config=/usr/bin/php-config$*
