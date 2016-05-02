@@ -4,8 +4,11 @@ done
 
 if [ -e /usr/lib/php/php-maintscript-helper ] ; then
     . /usr/lib/php/php-maintscript-helper
-    for conf in #NAMES# ; do
-        php_invoke #HELPER# #VERSION# ALL $conf || #ERROR_HANDLER#
+
+    for version in #VERSIONS# ; do
+        for conf in #NAMES# ; do
+            php_invoke #HELPER# $version ALL $conf || #ERROR_HANDLER#
+	done
     done
 else
     for conf in #NAMES# ; do

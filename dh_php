@@ -260,7 +260,9 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 	my @versions;
 
 	if ($dh{PHP_VERSION}) {
-		push @versions, $dh{PHP_VERSION};
+		@versions = split ' ', $dh{PHP_VERSION};
+	} elsif ($ENV{'DH_PHP_VERSIONS'}) {
+		@versions = split ' ', $ENV{'DH_PHP_VERSIONS'};
 	} else {
 		@versions = php_versions();
 	}
@@ -327,18 +329,14 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 
 		my $depends = "php-common (>= 1:7.0+33~)";
 
-		if ($dh{PHP_VERSION}) {
-			$depends = "$depends, " . php_api_version($dh{PHP_VERSION});
-		} else {
-			my @api_versions;
-			foreach my $version (@versions)
-			{
-				push @api_versions, php_api_version($version);
-			}
-			$depends .= ", " . join(" | ", @api_versions);
+		my @api_versions;
+		foreach my $version (@versions)
+		{
+		    push @api_versions, php_api_version($version);
 		}
+		$depends .= ", " . join(" | ", @api_versions);
 		addsubstvar($package, "php:Depends", $depends);
-
+		
 		my $modules = join(" ", uniq(@{$PACKAGE_TYPE{'has_a_module'}}));
 		push @postinst_autoscripts, ["enmod", $modules];
 	}
@@ -358,12 +356,8 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 					HELPER => $ref->[0],
 					NAMES  => $ref->[1],
 					ERROR_HANDLER => $PACKAGE_TYPE{handler},
-					VERSION => "ALL"
+					VERSIONS => join(" ", @versions);
 				);
-
-				if ($dh{PHP_VERSION}) {
-					$replacements{'VERSION'} = $dh{PHP_VERSION};
-				}
 
 				if ($script_type eq "prerm" || $script_type eq "postrm")
 				{
