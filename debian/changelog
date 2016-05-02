@@ -1,3 +1,10 @@
+dh-php (0.18) unstable; urgency=medium
+
+  * Add support for multiple PHP versions with --php-version='5.5 5.6' or
+    environment variable DH_PHP_VERSIONS="7.0 7.1"
+
+ -- Ondřej Surý <ondrej@debian.org>  Mon, 02 May 2016 10:21:04 +0200
+
 dh-php (0.17) unstable; urgency=medium
 
   * Add PECL_CONFIGURE_MAINT_APPEND variable to add more configure options
