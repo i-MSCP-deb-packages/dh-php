@@ -356,7 +356,7 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 					HELPER => $ref->[0],
 					NAMES  => $ref->[1],
 					ERROR_HANDLER => $PACKAGE_TYPE{handler},
-					VERSIONS => join(" ", @versions);
+					VERSIONS => join(" ", @versions)
 				);
 
 				if ($script_type eq "prerm" || $script_type eq "postrm")
