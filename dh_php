@@ -253,8 +253,6 @@ foreach my $package ((@{$dh{DOPACKAGES}}))
 
 	my $file = pkgfile($package, "php");
 
-	error(".php configuration file is needed for dh_php") unless ($file);
-
 	my $tmp  = tmpdir($package);
 
 	my @versions;
