@@ -1,3 +1,9 @@
+dh-php (0.21) unstable; urgency=medium
+
+  * Fix the final cleanup loop in postrm
+
+ -- Ondřej Surý <ondrej@debian.org>  Thu, 16 Jun 2016 09:03:25 +0200
+
 dh-php (0.20) unstable; urgency=medium
 
   * Don't fail when d/<package>.php is not present to not break multiple
