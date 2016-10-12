@@ -1,3 +1,9 @@
+dh-php (0.22) unstable; urgency=medium
+
+  * Add logic to limit minimum and maximum PHP versions from package*xml
+
+ -- Ondřej Surý <ondrej@debian.org>  Wed, 12 Oct 2016 17:00:37 +0200
+
 dh-php (0.21) unstable; urgency=medium
 
   * Fix the final cleanup loop in postrm
