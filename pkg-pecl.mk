@@ -26,8 +26,13 @@ INSTALL_ROOT = $(CURDIR)/debian/php-$(PECL_NAME)
 
 # find corresponding package-PHP_MAJOR.PHP_MINOR.xml, package-PHP_MAJOR.xml or package.xml
 $(foreach ver,$(PHP_VERSIONS),$(eval PACKAGE_XML_$(ver) := $(word 1,$(wildcard package-$(ver).xml package-$(basename $(ver)).xml package.xml))))
-# fill DH_PHP_VERSIONS with versions that have corresponding package.xml
-export DH_PHP_VERSIONS = $(if $(DH_PHP_VERSIONS_OVERRIDE),$(DH_PHP_VERSIONS_OVERRIDE),$(foreach ver,$(PHP_VERSIONS),$(if $(PACKAGE_XML_$(ver)),$(ver))))
+# fill DH_PHP_VERSIONS with versions that have corresponding package.xml and are not outside the specification
+$(foreach ver,$(PHP_VERSIONS),$(eval PHP_MIN_VER_$(ver) := $(if $(PACKAGE_XML_$(ver)),$(shell xml2 < $(PACKAGE_XML_$(ver)) | sed -ne "s,^/package/dependencies/required/php/min=\([0-9]\+\.[0-9]\+\)[0-9.]*,\1,p"),)))
+$(foreach ver,$(PHP_VERSIONS),$(eval PHP_MAX_VER_$(ver) := $(if $(PACKAGE_XML_$(ver)),$(shell xml2 < $(PACKAGE_XML_$(ver)) | sed -ne "s,^/package/dependencies/required/php/max=\([0-9]\+\.[0-9]\+\)[0-9.]*,\1,p"),)))
+MIN_PHP_VERSIONS := $(foreach ver,$(PHP_VERSIONS),$(if $(PHP_MIN_VER_$(ver)),$(shell dpkg --compare-versions "$(PHP_MIN_VER_$(ver))" le "$(ver)" && echo "$(ver)"),$(ver)))
+MAX_PHP_VERSIONS := $(foreach ver,$(MIN_PHP_VERSIONS),$(if $(PHP_MAX_VER_$(ver)),$(shell dpkg --compare-versions "$(PHP_MAX_VER_$(ver))" gt "$(ver)" && echo "$(ver)"),$(ver)))
+export DH_PHP_VERSIONS = $(if $(DH_PHP_VERSIONS_OVERRIDE),$(DH_PHP_VERSIONS_OVERRIDE),$(foreach ver,$(MAX_PHP_VERSIONS),$(if $(PACKAGE_XML_$(ver)),$(ver))))
+
 # for each ver in $(DH_PHP_VERSIONS), look into each corresponding package.xml for upstream PECL version
 $(foreach ver,$(DH_PHP_VERSIONS),$(eval PECL_SOURCE_$(ver) := $(if $(PACKAGE_XML_$(ver)),$(shell xml2 < $(PACKAGE_XML_$(ver)) | sed -ne "s,^/package/name=,,p")-$(shell xml2 < $(PACKAGE_XML_$(ver)) | sed -ne "s,^/package/version/release=,,p"),undefined)))
 
