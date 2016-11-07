@@ -1,3 +1,10 @@
+dh-php (0.23) unstable; urgency=medium
+
+  * Take only first two numbers and ignore rest for PHP_MIN_VER and
+    PHP_MAX_VER
+
+ -- Ondřej Surý <ondrej@debian.org>  Mon, 07 Nov 2016 12:26:15 +0100
+
 dh-php (0.22) unstable; urgency=medium
 
   * Add logic to limit minimum and maximum PHP versions from package*xml
