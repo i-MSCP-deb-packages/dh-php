@@ -1,6 +1,13 @@
+dh-php (0.25) unstable; urgency=medium
+
+  * Fix --as-needed problem in php-imagick and put --as-needed back
+
+ -- Ondřej Surý <ondrej@debian.org>  Thu, 15 Dec 2016 15:52:37 +0100
+
 dh-php (0.24) unstable; urgency=medium
 
-  * Disable --as-needed as PHP_CHECK_FUNC() fails to order the objects properly
+  * Disable --as-needed as PHP_CHECK_FUNC() fails to order the objects
+    properly
 
  -- Ondřej Surý <ondrej@debian.org>  Thu, 15 Dec 2016 15:17:22 +0100
 
