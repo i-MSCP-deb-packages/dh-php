@@ -3,7 +3,7 @@ Section: php
 Priority: extra
 Maintainer: Ondřej Surý <ondrej@debian.org>
 Build-Depends: debhelper (>= 9)
-Standards-Version: 3.9.6
+Standards-Version: 3.9.8
 Vcs-Git: git://anonscm.debian.org/pkg-php/dh-php.git
 Vcs-Browser: https://anonscm.debian.org/git/pkg-php/dh-php.git
 
