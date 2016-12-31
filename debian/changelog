@@ -1,3 +1,10 @@
+dh-php (0.26) unstable; urgency=medium
+
+  * Update Vcs-Browser URL (Closes: #849257)
+  * Bump standards version (no change)
+
+ -- Ondřej Surý <ondrej@debian.org>  Sat, 31 Dec 2016 13:14:07 +0100
+
 dh-php (0.25) unstable; urgency=medium
 
   * Fix --as-needed problem in php-imagick and put --as-needed back
