@@ -7,6 +7,7 @@ variables:
   DEBFULLNAME: "Ondřej Surý"
   DEBEMAIL: "ondrej@debian.org"
   DH_VERBOSE: 1
+  DEBUILD: debuild -i -I. -uc -us
 
 binary:jessie:
   stage: binary
@@ -19,7 +20,7 @@ binary:jessie:
     - apt-get -y --no-install-recommends install build-essential devscripts pristine-tar equivs lintian gnupg ubuntu-dev-tools distro-info git-buildpackage
     - mk-build-deps --install --remove
   script:
-    - gbp buildpackage --git-builder='debuild -i -I. -uc -us -sa -d -nc' --git-cleaner=/bin/true --git-verbose --git-color=on --git-ignore-branch --git-export-dir=$CI_PROJECT_DIR/build-area/ --git-pristine-tar --git-purge --git-postexport='dch --no-force-save-on-release --force-distribution --distribution "$DIST" --force-bad-version --newversion "$(dpkg-parsechangelog -SVersion)+0~$CI_PIPELINE_ID+$DIST" --vendor "$VENDOR" "Backport for Debian Jessie (8)"'
+    - gbp buildpackage --git-builder='$DEBUILD' --git-cleaner=/bin/true --git-verbose --git-color=on --git-ignore-branch --git-export-dir=$CI_PROJECT_DIR/build-area/ --git-pristine-tar --git-purge --git-postexport='dch --no-force-save-on-release --force-distribution --distribution "$DIST" --force-bad-version --newversion "$(dpkg-parsechangelog -SVersion)+0~$CI_PIPELINE_ID+$DIST" --vendor "$VENDOR" "Backport for Debian Jessie (8)"'
   artifacts:
     paths:
       - $CI_PROJECT_DIR/build-area/*
@@ -36,7 +37,7 @@ binary:stretch:
     - apt-get -y --no-install-recommends install build-essential devscripts pristine-tar equivs lintian gnupg ubuntu-dev-tools distro-info git-buildpackage
     - mk-build-deps --install --remove
   script:
-    - gbp buildpackage --git-builder='debuild -i -I. -uc -us -sa -d -nc' --git-cleaner=/bin/true --git-verbose --git-color=on --git-ignore-branch --git-export-dir=$CI_PROJECT_DIR/build-area/ --git-pristine-tar --git-purge --git-postexport='dch --no-force-save-on-release --force-distribution --distribution "$DIST" --force-bad-version --newversion "$(dpkg-parsechangelog -SVersion)+0~$CI_PIPELINE_ID+$DIST" --vendor "$VENDOR" "Backport for Debian Stretch (9)"'
+    - gbp buildpackage --git-builder='$DEBUILD' --git-cleaner=/bin/true --git-verbose --git-color=on --git-ignore-branch --git-export-dir=$CI_PROJECT_DIR/build-area/ --git-pristine-tar --git-purge --git-postexport='dch --no-force-save-on-release --force-distribution --distribution "$DIST" --force-bad-version --newversion "$(dpkg-parsechangelog -SVersion)+0~$CI_PIPELINE_ID+$DIST" --vendor "$VENDOR" "Backport for Debian Stretch (9)"'
   artifacts:
     paths:
       - $CI_PROJECT_DIR/build-area/*
@@ -53,7 +54,7 @@ binary:buster:
     - apt-get -y --no-install-recommends install build-essential devscripts pristine-tar equivs lintian gnupg ubuntu-dev-tools distro-info git-buildpackage
     - mk-build-deps --install --remove
   script:
-    - gbp buildpackage --git-builder='debuild -i -I. -uc -us -sa -d -nc' --git-cleaner=/bin/true --git-verbose --git-color=on --git-ignore-branch --git-export-dir=$CI_PROJECT_DIR/build-area/ --git-pristine-tar --git-purge --git-postexport='dch --no-force-save-on-release --force-distribution --distribution "$DIST" --force-bad-version --newversion "$(dpkg-parsechangelog -SVersion)+0~$CI_PIPELINE_ID+$DIST" --vendor "$VENDOR" "Backport for Debian Buster (10)"'
+    - gbp buildpackage --git-builder='$DEBUILD' --git-cleaner=/bin/true --git-verbose --git-color=on --git-ignore-branch --git-export-dir=$CI_PROJECT_DIR/build-area/ --git-pristine-tar --git-purge --git-postexport='dch --no-force-save-on-release --force-distribution --distribution "$DIST" --force-bad-version --newversion "$(dpkg-parsechangelog -SVersion)+0~$CI_PIPELINE_ID+$DIST" --vendor "$VENDOR" "Backport for Debian Buster (10)"'
   artifacts:
     paths:
       - $CI_PROJECT_DIR/build-area/*
@@ -70,7 +71,7 @@ binary:sid:
     - apt-get -y --no-install-recommends install build-essential devscripts pristine-tar equivs lintian gnupg ubuntu-dev-tools distro-info git-buildpackage
     - mk-build-deps --install --remove
   script:
-    - gbp buildpackage --git-builder='debuild -i -I. -uc -us -sa -d -nc' --git-cleaner=/bin/true --git-verbose --git-color=on --git-ignore-branch --git-export-dir=$CI_PROJECT_DIR/build-area/ --git-pristine-tar --git-purge --git-postexport='dch --no-force-save-on-release --force-distribution --distribution "$DIST" --force-bad-version --newversion "$(dpkg-parsechangelog -SVersion)+0~$CI_PIPELINE_ID+$DIST" --vendor "$VENDOR" "Backport for Debian Sid"'
+    - gbp buildpackage --git-builder='$DEBUILD' --git-cleaner=/bin/true --git-verbose --git-color=on --git-ignore-branch --git-export-dir=$CI_PROJECT_DIR/build-area/ --git-pristine-tar --git-purge --git-postexport='dch --no-force-save-on-release --force-distribution --distribution "$DIST" --force-bad-version --newversion "$(dpkg-parsechangelog -SVersion)+0~$CI_PIPELINE_ID+$DIST" --vendor "$VENDOR" "Backport for Debian Sid"'
   artifacts:
     paths:
       - $CI_PROJECT_DIR/build-area/*
