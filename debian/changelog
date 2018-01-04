@@ -1,3 +1,9 @@
+dh-php (0.29) unstable; urgency=medium
+
+  * Update the Vcs-* to salsa.d.o
+
+ -- Ondřej Surý <ondrej@debian.org>  Thu, 04 Jan 2018 15:42:54 +0000
+
 dh-php (0.28) unstable; urgency=medium
 
   * Update the Vcs-* links to https://gitlab.com/deb.sury.org
