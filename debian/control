@@ -1,7 +1,8 @@
 Source: dh-php
 Section: php
 Priority: extra
-Maintainer: Ondřej Surý <ondrej@debian.org>
+Maintainer: Debian PHP Maintainers <team+pkg-php@tracker.debian.org>
+Uploaders: Ondřej Surý <ondrej@debian.org>,
 Build-Depends: debhelper (>= 9)
 Standards-Version: 3.9.8
 Vcs-Git: https://salsa.debian.org/php-team/dh-php.git
