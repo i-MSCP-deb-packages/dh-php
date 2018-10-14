@@ -1,3 +1,10 @@
+dh-php (0.31) unstable; urgency=medium
+
+  * Cleanup stale config files from no longer supported PHP versions
+    (Closes: #906744)
+
+ -- Ondřej Surý <ondrej@debian.org>  Sun, 14 Oct 2018 08:34:06 +0000
+
 dh-php (0.30) unstable; urgency=medium
 
   * Update the maintainer email to team+pkg-php@tracker.debian.org
