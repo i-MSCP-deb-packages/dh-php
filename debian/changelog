@@ -1,3 +1,10 @@
+dh-php (0.32) unstable; urgency=medium
+
+  * Use dpkg-query --listfiles to get the list of old configuration files
+  * Change the priority from extra to optional
+
+ -- Ondřej Surý <ondrej@debian.org>  Mon, 15 Oct 2018 09:24:34 +0000
+
 dh-php (0.31) unstable; urgency=medium
 
   * Cleanup stale config files from no longer supported PHP versions
