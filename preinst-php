@@ -1,25 +1,29 @@
-for conf in #NAMES#; do
-    dpkg-maintscript-helper rm_conffile /etc/php/mods-available/${conf}.ini -- "$@"
+# Hey emacs, this is -*- shell-script -*-
+
+for name in #NAMES# ; do
+    find /etc/php -mindepth 3 -maxdepth 3 -name "${name}.ini*" | \
+    sed -Ee "s,.dpkg-(remove|bak|backup)$,," | \
+    grep "/etc/php/[.0-9]*/mods-available/${name}.ini" | \
+    fgrep -v "$(for version in #VERSIONS# ; do echo "/etc/php/${version}/mods-available/${name}.ini"; done)" | \
+    while read conffile; do
+	dpkg-maintscript-helper rm_conffile "${conffile}" -- "$@"
+	rmdir  --ignore-fail-on-non-empty "$(dirname $(dirname "${conffile}"))"/mods-available
+	rmdir  --ignore-fail-on-non-empty "$(dirname $(dirname "${conffile}"))"
+    done
 done
 
 if [ "$1" = "upgrade" ]; then
-    OLD_VERSIONS="$(find /etc/php/ -mindepth 1 -maxdepth 1 | cut -f 4 -d / | sed $(for version in #VERSIONS# ; do echo -n " -e s/${version}//"; done))"
-
-    for oldversion in ${OLD_VERSIONS} ; do
-	for conf in #NAMES# ; do
-	    dpkg-maintscript-helper rm_conffile /etc/php/${oldversion}/mods-available/${conf}.ini -- "$@"
-	done
-    done
-
     # Cleanup of the old symlinks (including broken symlinks)
-    inidir=/etc/php/mods-available
-    for dsoname in #NAMES#; do
-	inifile=${dsoname}.ini
-	find /etc/php/ -type l | \
+    for version in #VERSIONS# ; do
+        inidir="/etc/php/${version}"
+	for name in #NAMES#; do
+	    inifile="${name}.ini"
+	    find "${inidir}" -xtype l | \
 	    while read symlink; do
-		if [ "$(readlink $symlink)" = "${inidir}/$inifile" ]; then
+	        if [ "$(basename "$(readlink -m "${symlink}")")" = "${inifile}" ]; then
 		    rm -f "${symlink}"
 		fi
 	    done
+	done
     done
 fi

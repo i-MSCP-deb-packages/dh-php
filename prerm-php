@@ -1,11 +1,13 @@
-for conf in #NAMES#; do
-    dpkg-maintscript-helper rm_conffile /etc/php/mods-available/${conf}.ini -- "$@"
-done
+# Hey emacs, this is -*- shell-script -*-
 
-OLD_VERSIONS="$(find /etc/php/ -mindepth 1 -maxdepth 1 | cut -f 4 -d / | sed $(for version in #VERSIONS# ; do echo -n " -e s/${version}//"; done))"
-
-for oldversion in ${OLD_VERSIONS} ; do
-    for conf in #NAMES# ; do
-	dpkg-maintscript-helper rm_conffile /etc/php/${oldversion}/mods-available/${conf}.ini -- "$@"
+for name in #NAMES# ; do
+    find /etc/php -mindepth 3 -maxdepth 3 -name "${name}.ini*" | \
+    sed -Ee "s,.dpkg-(remove|bak|backup)$,," | \
+    grep "/etc/php/[.0-9]*/mods-available/${name}.ini" | \
+    fgrep -v "$(for version in #VERSIONS# ; do echo "/etc/php/${version}/mods-available/${name}.ini"; done)" | \
+    while read conffile; do
+	dpkg-maintscript-helper rm_conffile "${conffile}" -- "$@"
+	rmdir  --ignore-fail-on-non-empty "$(dirname $(dirname "${conffile}"))"/mods-available
+	rmdir  --ignore-fail-on-non-empty "$(dirname $(dirname "${conffile}"))"
     done
 done
