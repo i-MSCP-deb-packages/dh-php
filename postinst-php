@@ -2,9 +2,23 @@ for conf in #NAMES#; do
     dpkg-maintscript-helper rm_conffile /etc/php/mods-available/${conf}.ini -- "$@"
 done
 
+OLD_VERSIONS="$(find /etc/php/ -mindepth 1 -maxdepth 1 | cut -f 4 -d / | sed $(for version in #VERSIONS# ; do echo -n " -e s/${version}//"; done))"
+
+for oldversion in ${OLD_VERSIONS} ; do
+    for conf in #NAMES# ; do
+	dpkg-maintscript-helper rm_conffile /etc/php/${oldversion}/mods-available/${conf}.ini -- "$@"
+    done
+done
+    
 if [ -e /usr/lib/php/php-maintscript-helper ] ; then
     . /usr/lib/php/php-maintscript-helper
 
+    for oldversion in ${OLD_VERSIONS} ; do
+        for conf in #NAMES# ; do
+            php_invoke dismod $oldversion ALL $conf || true
+        done
+    done
+    
     for version in #VERSIONS# ; do
         for conf in #NAMES# ; do
             php_invoke #HELPER# $version ALL $conf || #ERROR_HANDLER#
