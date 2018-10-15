@@ -1,6 +1,6 @@
 Source: dh-php
 Section: php
-Priority: extra
+Priority: optional
 Maintainer: Debian PHP Maintainers <team+pkg-php@tracker.debian.org>
 Uploaders: Ondřej Surý <ondrej@debian.org>,
 Build-Depends: debhelper (>= 9)
