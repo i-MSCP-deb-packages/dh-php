@@ -1,3 +1,10 @@
+dh-php (0.34) unstable; urgency=medium
+
+  * Disable and re-enable module in preinst to handle priority changes in
+    the modules
+
+ -- Ondřej Surý <ondrej@debian.org>  Sun, 04 Nov 2018 04:03:22 +0000
+
 dh-php (0.33) unstable; urgency=medium
 
   * Make the empty directory remove less prone to errors
