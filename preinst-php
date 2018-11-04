@@ -34,3 +34,16 @@ if [ "$1" = "upgrade" ]; then
 	done
     done
 fi
+
+# Disable and then re-enable module on upgrades to deal with priority changes
+if [ "$1" = "upgrade" ]; then
+    if [ -e /usr/lib/php/php-maintscript-helper ] ; then
+	. /usr/lib/php/php-maintscript-helper
+
+	for version in #VERSIONS# ; do
+	    for name in #NAMES# ; do
+		php_invoke dismod "$version" ALL "$name" || #ERROR_HANDLER#
+	    done
+	done
+    fi
+fi

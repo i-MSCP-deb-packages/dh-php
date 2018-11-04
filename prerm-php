@@ -18,3 +18,16 @@ for name in #NAMES# ; do
 	done
     done
 done
+
+# Disable and then re-enable module on upgrades to deal with priority changes
+if [ "$1" = "upgrade" ]; then
+    if [ -e /usr/lib/php/php-maintscript-helper ] ; then
+	. /usr/lib/php/php-maintscript-helper
+
+	for version in #VERSIONS# ; do
+	    for name in #NAMES# ; do
+		php_invoke #HELPER# "$version" ALL "$name" || #ERROR_HANDLER#
+	    done
+	done
+    fi
+fi
