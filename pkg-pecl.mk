@@ -19,6 +19,9 @@ export DEB_LDFLAGS_MAINT_APPEND = -Wl,--as-needed
 # Don't ever use RPATH on Debian
 export PHP_RPATH=no
 
+# Tests should run without interaction
+export NO_INTERACTION=1
+
 PHP_VERSIONS := $(shell /usr/sbin/phpquery -V)
 
 PECL_NAME    := $(if $(PECL_NAME_OVERRIDE),$(PECL_NAME_OVERRIDE),$(subst php-,,$(DEB_SOURCE)))
@@ -39,16 +42,17 @@ $(foreach ver,$(DH_PHP_VERSIONS),$(eval PECL_SOURCE_$(ver) := $(if $(PACKAGE_XML
 CONFIGURE_TARGETS = $(addprefix configure-,$(addsuffix -stamp,$(DH_PHP_VERSIONS)))
 BUILD_TARGETS     = $(addprefix build-,$(addsuffix -stamp,$(DH_PHP_VERSIONS)))
 INSTALL_TARGETS   = $(addprefix install-,$(addsuffix -stamp,$(DH_PHP_VERSIONS)))
+TEST_TARGETS      = $(addprefix test-,$(addsuffix -stamp,$(DH_PHP_VERSIONS)))
 CLEAN_TARGETS     = $(addprefix clean-,$(addsuffix -stamp,$(DH_PHP_VERSIONS)))
-
 %:
 	dh $@ --with php
 
 override_dh_auto_configure: $(CONFIGURE_TARGETS)
 override_dh_auto_build: $(BUILD_TARGETS)
 override_dh_auto_install: $(INSTALL_TARGETS)
+override_dh_auto_test: $(TEST_TARGETS)
 override_dh_auto_clean: $(CLEAN_TARGETS)
-	-rm -f $(CONFIGURE_TARGETS) $(BUILD_TARGETS) $(INSTALL_TARGETS) $(CLEAN_TARGETS)
+	-rm -f $(CONFIGURE_TARGETS) $(BUILD_TARGETS) $(INSTALL_TARGETS) $(TEST_TARGETS) $(CLEAN_TARGETS)
 
 clean-%-stamp: SOURCE_DIR = build-$(*)
 clean-%-stamp:
@@ -71,6 +75,11 @@ install-%-stamp: SOURCE_DIR = build-$(*)
 install-%-stamp:
 	dh_auto_install --sourcedirectory=$(SOURCE_DIR) -- INSTALL_ROOT=$(INSTALL_ROOT)
 	touch install-$*-stamp
+
+test-%-stamp: SOURCE_DIR = build-$(*)
+test-%-stamp:
+	dh_auto_test --sourcedirectory=$(SOURCE_DIR) -- INSTALL_ROOT=$(INSTALL_ROOT)
+	touch test-$*-stamp
 
 override_dh_gencontrol: ,:=,
 override_dh_gencontrol:
